@@ -36,7 +36,7 @@ a.pop();    // 배열 끝에서 요소 제거
 // 5. 배열 크기 확장 과정은 배열이 꽉 찰 때마다 반복적으로 수행됨.
 
 // Dynamic Array Source Code
-
+// TODO: hasNext(), next(), toString(),
 class DynamicArray {
     constructor(capacity = 2) {
         if (capacity < 0) throw new Error("Illegal Capacity: " + capacity);
@@ -62,6 +62,32 @@ class DynamicArray {
             throw new Error("Index out of bounds");
         }
         this.arr[index] = element;
+    }
+
+    next() {
+        var index = 0;
+        return this.arr[index++]
+    }
+
+    hasNext() {
+        return index < this.length;
+    }
+
+    toString() {
+        if (this.length === 0) return "[]";
+        else {
+            var sb = "[";
+
+            for (let i = 0; i < this.length; i++) {
+                if (i === this.length - 1) {
+                    sb += (String(this.arr[i])) + "]"
+                } else {
+                    sb += (String(this.arr[i]) + ", ")
+                }
+            }
+
+            return sb;
+        }
     }
 
     push(element) {
@@ -95,7 +121,6 @@ class DynamicArray {
 
         return target;
     }
-
 
     pop() {
         if (this.length === 0) {
@@ -134,6 +159,7 @@ dynamicArray.push(1);
 dynamicArray.push(2);
 console.log(dynamicArray.size()); // 2
 dynamicArray.push(3); // 크기가 2에서 4로 확장
+console.log(dynamicArray.toString())
 console.log(dynamicArray.size()); // 3
 dynamicArray.pop();
 console.log(dynamicArray.size()); // 2

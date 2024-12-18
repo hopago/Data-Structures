@@ -165,3 +165,230 @@ dynamicArray.pop();
 console.log(dynamicArray.size()); // 2
 dynamicArray.clear();
 console.log(dynamicArray.size()); // 0
+
+// Singly and Doubly Linked List
+
+/** Linked List
+ * 연결 리스트는 노드를 순차적으로 포함하는 리스트
+ * 모든 노드는 다음 노드에 대한 포인터를 가지고 있다 === 마지막 node는 널 포인터 익셉션을 가지고 있다
+ * Head: 첫 노드
+ * Tail: 끝 노드
+ * Pointer: 다른 노드에 대한 참조값
+ * Node: 데이터와 포인터를 포함한 객체
+ * Singly: 포인터, 다음 노드 / 메모리 소모가 작다, 이전 요소에 대한 접근 불가
+ * Doubly: 포인터, 다음 노드, 이전 노드 / 이전 요소에 대한 접근 가능, 메모리 소모 2배
+ */
+
+/** Singly Linked List Insertion
+ * 1. 삽입하고자 하는 위치의 이전 노드 탐색
+ * 2. 이전 노드의 포인터 변경, 삽입 노드의 포인터를 다음 노드 값으로 변경
+ */
+
+/** Doubly Linked List Insertion
+ * 1. 삽입 위치 직전까지 탐색
+ * 2. 삽입 노드는 직전 노드와 다음 노드에 대한 포인터를 가진다
+ * 3. 이전 노드의 다음 포인터를 삽입 노드로 만들고 다음 노드의 이전 포인터를 삽입 노드로 만든다
+ */
+
+/** Singly Linked List Removing
+ * 1. 제거하려는 노드를 찾는다
+ * 2. 삭제하려는 노드의 직전 노드의 다음 포인터를 삭제하려는 노드의 다음 노드로 바꿔준다
+ * 3. C, C#의 경우 메모리 관리, JS의 경우 GC로 수집됨
+ */
+
+/** Doubly Linked List Removing
+ * 1. 제거하려는 노드를 찾는다
+ * 2. 삭제하려는 노드의 직전 노드의 다음 포인터를 삭제하려는 노드의 다음 노드로 바꿔준다
+ * 3. 삭제하려는 노드의 다음 노드의 이전 포인터를 삭제하려는 노드의 이전 노드로 바꿔준다
+ */
+
+/* Complexity Table: Singly vs Doubly Linked List
+    Operation	     Singly Linked List	   Doubly Linked List
+    Remove at Head	      O(1)	                   O(1)
+    Remove at Tail	      O(n)	                   O(1)
+    Remove at Middle      O(n)	                   O(n)
+ */
+
+/** Doubly Linked List
+ * 
+ */
+
+class Node {
+    constructor(data, prev = null, next = null) {
+        this.data = data;
+        this.prev = prev;
+        this.next = next;
+    }
+
+    toString() {
+        return JSON.stringify(this.data);
+    }
+}
+
+class DoublyLinkedList {
+    constructor() {
+        this.size = 0;
+        this.head = null;
+        this.tail = null;
+    }
+
+    clear() {
+        let trav = this.head;
+        while (trav) {
+            let next = trav.next;
+            trav.prev = null;
+            trav.next = null;
+            trav.data = null;
+            trav = next;
+        }
+        this.head = null;
+        this.tail = null;
+        this.size = 0;
+    }
+
+    getSize() {
+        return this.size;
+    }
+
+    isEmpty() {
+        return this.size === 0;
+    }
+
+    addFirst(element) {
+        if (this.isEmpty()) {
+            this.head = this.tail = new Node(element, null, null);
+        } else {
+            this.head.prev = new Node(element, null, this.head);
+            this.head = this.head.prev;
+        }
+        this.size++;
+    }
+
+    addLast(element) {
+        if (this.isEmpty()) {
+            this.head = this.tail = new Node(element, null, null);
+        } else {
+            this.tail.next = new Node(element, this.tail, null)
+            this.tail = this.tail.next;
+        }
+        this.size++;
+    }
+
+    getFirst() {
+        if (this.isEmpty()) throw new Error("Empty List");
+        else return this.head.data;
+    }
+
+    getLast() {
+        if (this.isEmpty()) throw new Error("Empty List");
+        else return this.tail.data;
+    }
+
+    removeFirst() {
+        if (this.isEmpty()) throw new Error("Empty List");
+        const data = this.head.data;
+        this.head = this.head.next;
+        this.size--;
+        if (this.isEmpty()) this.tail = null;
+        else this.head.prev = null;
+        return data;
+    }
+
+    removeLast() {
+        if (this.isEmpty()) throw new Error("Empty List");
+        const data = this.tail.data;
+        this.tail = this.tail.prev;
+        this.size--;
+        if (this.isEmpty()) this.head = null;
+        else this.tail.next = null;
+        return data;
+    }
+
+    remove(node) {
+        if (node.prev === null) return this.removeFirst();
+        if (node.next === null) return this.removeLast();
+        node.next.prev = node.prev;
+        node.prev.next = node.next;
+        const data = node.data;
+        node.data = null;
+        node = node.prev = node.next = null;
+        --this.size;
+        return data;
+    }
+
+    removeAt(index) {
+        if (index < 0 || index >= this.size) throw new Error("Invalid Index");
+        let i, trav;
+        if (index < this.size / 2) {
+            for (i = 0, trav = this.head; i !== index; i++) {
+                trav = trav.next;
+            }
+        } else {
+            for (i = this.size - 1, trav = this.tail; i !== index; i--) {
+                trav = trav.prev;
+            }
+        }
+        return this.remove(trav)
+    }
+
+    removeTarget(object) {
+        let trav = this.head;
+        if (object === null) {
+            for (trav = this.head; trav !== null; trav = trav.next) {
+                if (trav.data === null) {
+                    this.remove(trav)
+                    return true;
+                }
+            }
+        } else {
+            for (trav = this.head; trav !== null; trav = trav.next) {
+                if (object === trav.data) {
+                    this.remove(trav)
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    indexOf(object) {
+        let index = 0;
+        let trav = this.head;
+        if (object === null) {
+            for (trav = this.head; trav !== null; trav = trav.next, index++) {
+                if (trav.data === null) return index;
+            }
+        } else {
+            for (trav = this.head; trav !== null; trav = trav.next, index++) {
+                if (object === trav.data) return index;
+            }
+        }
+        return -1;
+    }
+
+    contains(object) {
+        return this.indexOf(object) !== -1;
+    }
+
+    iterator(start = 0) {
+        let trav = this.head;
+        let n = 0;
+
+        while (n < start && trav !== null) {
+            trav = trav.next;
+            n++;
+        }
+
+        return {
+            hasNext: () => {
+                return trav !== null;
+            },
+            next: () => {
+                if (trav === null) throw new Error("No more elements");
+                const data = trav.data;
+                trav = trav.next;
+                return data;
+            }
+        };
+    }
+}

@@ -158,4 +158,97 @@ console.log(stack.isEmpty()); // 출력: false
 console.log(stack.pop());  // 출력: 4
 console.log(stack.isEmpty()); // 출력: true
 
-// Queues
+/**
+ * **Queues**
+ * - 큐(Queue)는 **FIFO(First In, First Out)** 원칙을 따르는 선형 자료구조입니다.
+ * - 데이터를 한쪽 끝에서 삽입(Enqueue)하고, 반대쪽 끝에서 제거(Dequeue)합니다.
+ * - 삽입과 제거는 고정된 순서로 이루어지며, 가장 먼저 들어온 데이터가 가장 먼저 처리됩니다.
+ *
+ * **Terminology**
+ * - `Enqueue`: 데이터를 큐의 뒤쪽에 추가.
+ * - `Dequeue`: 큐의 앞쪽에서 데이터를 제거.
+ * - `Polling`: `Dequeue`와 유사한 작업.
+ * - `Peek`: 큐의 앞쪽 데이터를 제거하지 않고 확인.
+ *
+ * **Usage**
+ * 1. **대기열 모델링**:
+ *    - 예: 영화관 줄 서기, 고객 서비스 대기열.
+ * 2. **최근 추가된 요소 추적**:
+ *    - 예: 가장 최근에 추가된 `x`개의 요소를 관리.
+ * 3. **웹 서버 요청 관리**:
+ *    - 요청을 먼저 도착한 순서대로 처리 (FCFS: First Come First Serve).
+ * 4. **그래프 탐색**:
+ *    - BFS(너비 우선 탐색) 알고리즘에서 큐를 사용.
+ *
+ * **시간 복잡도**
+ * - `Enqueue`: O(1) - 끝에 데이터를 추가.
+ * - `Dequeue`: O(1) - 앞에서 데이터를 제거.
+ * - `Peek`: O(1) - 앞쪽 데이터 확인.
+ * - `Contains`: O(n) - 큐에 특정 데이터 포함 여부 확인.
+ * - `Removal`: O(n) - 특정 요소 제거.
+ * - `IsEmpty`: O(1) - 큐가 비어있는지 확인.
+ *
+ * **큐 작업 예제**
+ * 1. Enqueue(12): 큐에 12를 추가.
+ * 2. Dequeue(): 큐의 앞에서 데이터를 제거.
+ * 3. Enqueue(7): 큐에 7을 추가.
+ * 4. Enqueue(-6): 큐에 -6을 추가.
+ *
+ * **Queue Example - BFS (Breadth-First Search)**
+ * - 그래프 탐색에 큐를 사용하는 대표적인 알고리즘.
+ * - 루트 노드에서 시작하여 너비를 기준으로 탐색.
+ * 
+ * **알고리즘 (의사 코드)**
+ * Let Q be a Queue
+ * While Q is not empty:
+ *   node = Q.dequeue()  // 큐의 앞에서 노드를 제거
+ *   For neighbour in neighbours(node):  // 현재 노드의 이웃을 확인
+ *     If neighbour has not been visited:  // 방문하지 않은 경우
+ *       neighbour.visited = true         // 방문 처리
+ *       Q.enqueue(neighbour)             // 큐에 이웃 추가
+ *
+ * **주요 개념**
+ * 1. 방문 처리:
+ *    - `visited` 배열이나 `Set`을 사용해 중복 방문 방지.
+ * 2. 이웃 처리:
+ *    - 각 노드의 이웃을 큐에 추가하여 순차적으로 탐색.
+ * 3. 큐의 역할:
+ *    - 노드를 탐색 순서대로 저장하여 FIFO 방식으로 처리.
+ */
+
+class Queue {
+    constructor() {
+        this.list = []
+    }
+
+    queue(firstElem) {
+        this.list.push(firstElem)
+    }
+
+    size() {
+        return this.list.length;
+    }
+
+    isEmpty() {
+        return this.list.length === 0
+    }
+
+    peek() {
+        if (this.isEmpty()) throw new Error("Queue Empty")
+        return this.list[this.list.length - 1];
+    }
+
+    poll() {
+        if (this.isEmpty()) throw new Error("Queue Empty")
+        return this.list.shift()
+    }
+
+    offer(elem) {
+        this.list.push(elem)
+    }
+
+    iterator() {
+        return this.list[Symbol.iterator]();
+    }
+}
+

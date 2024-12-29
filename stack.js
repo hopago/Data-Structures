@@ -70,3 +70,92 @@ function isValidBracketString(bracketString) {
  * console.log(isValidBracketString("(]"));     // false
  * console.log(isValidBracketString("((("));    // false
  */
+
+/**
+ * **스택(Stack)**
+ * - 스택은 데이터를 LIFO(Last In, First Out) 방식으로 처리하는 자료구조입니다.
+ * - 한쪽 끝에서만 삽입(push)과 제거(pop)이 가능합니다.
+ *
+ * **주요 메서드**
+ * 1. `push(elem)` - 스택에 요소를 추가.
+ * 2. `pop()` - 스택에서 요소를 제거하고 반환.
+ * 3. `peek()` - 스택의 맨 위 요소를 반환(제거하지 않음).
+ * 4. `isEmpty()` - 스택이 비어있는지 확인.
+ * 5. `size()` - 스택에 있는 요소의 개수를 반환.
+ * 6. `iterator()` - 스택의 요소를 순회하는 이터레이터 반환.
+ */
+
+class Stack {
+    constructor() {
+        this.list = []; // 내부 배열로 스택 구현
+    }
+
+    /**
+     * 스택에 요소 추가
+     * @param {*} elem - 추가할 요소
+     */
+    push(elem) {
+        this.list.push(elem);
+    }
+
+    /**
+     * 스택에서 요소 제거 및 반환
+     * @returns {*} 제거된 요소
+     * @throws {Error} 스택이 비어있는 경우
+     */
+    pop() {
+        if (this.isEmpty()) throw new Error("Empty Stack Exception");
+        return this.list.pop();
+    }
+
+    /**
+     * 스택의 맨 위 요소 반환 (제거하지 않음)
+     * @returns {*} 맨 위 요소
+     * @throws {Error} 스택이 비어있는 경우
+     */
+    peek() {
+        if (this.isEmpty()) throw new Error("Empty Stack Exception");
+        return this.list[this.list.length - 1];
+    }
+
+    /**
+     * 스택이 비어있는지 확인
+     * @returns {boolean} 스택이 비어있으면 true
+     */
+    isEmpty() {
+        return this.list.length === 0;
+    }
+
+    /**
+     * 스택의 크기 반환
+     * @returns {number} 스택 크기
+     */
+    size() {
+        return this.list.length;
+    }
+
+    /**
+     * 스택의 이터레이터 반환
+     * @returns {Iterator} 이터레이터
+     */
+    iterator() {
+        return this.list[Symbol.iterator]();
+    }
+}
+
+/**
+ * **사용 예제**
+ */
+const stack = new Stack();
+stack.push(4); // 스택에 4 추가
+stack.push(2); // 스택에 2 추가
+stack.push(5); // 스택에 5 추가
+console.log(stack.size()); // 출력: 3
+console.log(stack.peek()); // 출력: 5 (맨 위 요소)
+console.log(stack.pop());  // 출력: 5 (제거된 요소)
+console.log(stack.pop());  // 출력: 2
+console.log(stack.isEmpty()); // 출력: false
+console.log(stack.pop());  // 출력: 4
+console.log(stack.isEmpty()); // 출력: true
+
+// Queues

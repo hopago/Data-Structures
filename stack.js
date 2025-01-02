@@ -407,4 +407,178 @@ class Queue {
  *      10 12 15  8
  *    ```
  *    배열: `[3, 7, 5, 10, 12, 15, 8]`
+ * 
+ * Instructions:
+ * 
+ * Poll(): 
+ * - 삭제하려는 첫 번째 요소와 트리의 마지막 요소의 위치를 교환한 뒤, 트리의 마지막 요소가 된 첫 번째 요소를 제거한다.
+ * - 제거 후 힙 불변성이 깨진 상태가 되므로, 최대 힙이라면 더 큰 값, 최소 힙이라면 더 작은 값을 따라 아래로 비교하며 이동한다.
+ * 
+ * Remove(element): 
+ * - 삭제할 대상을 선형 탐색으로 찾아낸 뒤, 마지막 트리 요소와 자리를 교환한 후 삭제한다.
+ * - 이후, Poll()과 동일하게 트리의 조건을 맞추기 위해 비교하며 위로 올라가거나 아래로 내려간다.
+ * 
+ * Removing Elements From Binary Heap in O(log(n)):
+ * - 제거 알고리즘의 비효율성은 요소의 위치를 확인하기 위해 선형 탐색이 필요하다는 데서 발생한다.
+ * 
+ * 해결 방법:
+ * 1. 모든 노드를 특정 인덱스에 매핑하여, 제거할 노드의 인덱스를 빠르게 찾는다.
+ * 2. 힙에 중복된 값이 있을 경우, 하나의 값을 여러 위치에 매핑할 수 있다.
+ * 3. 각 값에 대한 인덱스 집합 또는 트리 집합을 유지하여 효율적인 삭제를 수행한다.
+ * 
+ * Example:
+ * Node Value    Position Value
+ * 2             0, 2, 6
+ * 7             1, 4
+ * 11            3
+ * 
+ * - 버블 업(Bubble Up) 및 버블 다운(Bubble Down) 작업 중, 각 값의 인덱스를 매핑하여 저장한다.
+ * - 특정 값을 교환할 수 있는 동일한 레벨의 노드와 자리를 바꾼 뒤 제거한다.
+ * 
+ * Question: 
+ * - 중복된 노드를 제거하려고 할 때, 어느 노드를 제거해야 할까? 제거할 노드를 선택하는 것이 중요한가?
+ * 
+ * Answer: 
+ * - 힙의 조건만 만족한다면 어느 노드를 제거하든 상관없다.
+ * 
+ * Instructions:
+ * insert(3): 
+ * - 트리의 바닥 레벨에 새로운 노드를 추가한다.
+ * - 값과 인덱스를 매핑 테이블에 추가한다.
+ * - 힙 불변성을 확인하고, 필요 시 버블 업(Bubble Up) 또는 버블 다운(Bubble Down) 작업을 수행한다.
+ * 
+ * remove(2): 
+ * - 값이 2인 노드 중 아무 노드나 제거한다. 예를 들어, 상위 노드를 제거한다고 가정하면,
+ *   마지막 노드와 교환한 후 인덱스도 변경한다.
+ * - 이후, 버블 업 또는 버블 다운을 수행하여 힙 조건을 만족시킨다.
+ * 
+ * poll(): 
+ * - Remove와 동일한 과정을 따른다.
  */
+
+class PQueue {
+    constructor(elements = []) {
+      this.heap = [];
+      this.nodeToIndexMap = new Map();
+
+      elements.forEach((el) => this.add(el));
+    }
+  
+    // 두 인덱스의 요소를 교환하는 메서드
+    swap(index1, index2) {
+      [this.heap[index1], this.heap[index2]] = [this.heap[index2], this.heap[index1]];
+  
+      // 인덱스 매핑을 업데이트
+      this.nodeToIndexMap.set(this.heap[index1], index1);
+      this.nodeToIndexMap.set(this.heap[index2], index2);
+    }
+  
+    // 새로운 요소를 힙에 추가
+    add(element) {
+      if (element == null) throw new Error("요소는 null이 될 수 없습니다.");
+      this.heap.push(element); // 힙 배열에 요소 추가
+      this.nodeToIndexMap.set(element, this.heap.length - 1); // 인덱스 매핑
+      this.swim(this.heap.length - 1); // 힙 조건을 유지하기 위해 swim 호출
+    }
+  
+    // 루트 요소를 제거하고 반환
+    poll() {
+      if (this.isEmpty()) return null; // 힙이 비어 있으면 null 반환
+      return this.removeAt(0); // 루트 요소 제거
+    }
+  
+    // 루트 요소를 반환 (제거하지 않음)
+    peek() {
+      return this.isEmpty() ? null : this.heap[0];
+    }
+  
+    // 특정 요소가 힙에 포함되어 있는지 확인
+    contains(element) {
+      return this.nodeToIndexMap.has(element);
+    }
+  
+    // 특정 요소를 제거
+    remove(element) {
+      if (!this.contains(element)) return false; // 요소가 없으면 false 반환
+      const index = this.nodeToIndexMap.get(element);
+      this.removeAt(index); // 해당 요소를 인덱스에서 제거
+      return true;
+    }
+  
+    // 특정 인덱스의 요소를 제거
+    removeAt(index) {
+      if (this.isEmpty()) return null;
+  
+      this.swap(index, this.heap.length - 1); // 마지막 요소와 위치 교환
+      const removedElement = this.heap.pop(); // 마지막 요소 제거
+      this.nodeToIndexMap.delete(removedElement); // 매핑에서 제거
+  
+      if (index < this.heap.length) {
+        this.sink(index); // 힙 조건을 유지하기 위해 sink 호출
+        if (this.heap[index] === removedElement) {
+          this.swim(index); // 필요한 경우 swim 호출
+        }
+      }
+  
+      return removedElement;
+    }
+  
+    // 힙 조건을 위로부터 유지 (올라감)
+    swim(index) {
+      let parent = Math.floor((index - 1) / 2); // 부모 노드 인덱스 계산
+      while (index > 0 && this.less(index, parent)) {
+        this.swap(index, parent); // 부모와 교환
+        index = parent;
+        parent = Math.floor((index - 1) / 2);
+      }
+    }
+  
+    // 힙 조건을 아래로부터 유지 (내려감)
+    sink(index) {
+      while (true) {
+        let smallest = index;
+        const left = 2 * index + 1; // 왼쪽 자식 노드
+        const right = 2 * index + 2; // 오른쪽 자식 노드
+  
+        if (left < this.heap.length && this.less(left, smallest)) {
+          smallest = left; // 작은 값을 가진 자식 선택
+        }
+        if (right < this.heap.length && this.less(right, smallest)) {
+          smallest = right;
+        }
+  
+        if (smallest === index) break; // 더 이상 교환할 필요가 없으면 종료
+        this.swap(index, smallest); // 교환
+        index = smallest;
+      }
+    }
+  
+    // 두 인덱스의 값을 비교 (작은 값이 우선)
+    less(i, j) {
+      return this.heap[i] < this.heap[j];
+    }
+  
+    // 힙이 비어 있는지 확인
+    isEmpty() {
+      return this.heap.length === 0;
+    }
+  
+    // 힙의 크기를 반환
+    size() {
+      return this.heap.length;
+    }
+  
+    // 현재 힙이 최소 힙 조건을 만족하는지 확인
+    isMinHeap(index = 0) {
+      if (index >= this.heap.length) return true;
+  
+      const left = 2 * index + 1; // 왼쪽 자식
+      const right = 2 * index + 2; // 오른쪽 자식
+  
+      if (left < this.heap.length && !this.less(index, left)) return false;
+      if (right < this.heap.length && !this.less(index, right)) return false;
+  
+      return this.isMinHeap(left) && this.isMinHeap(right);
+    }
+  }
+  

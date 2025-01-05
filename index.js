@@ -672,3 +672,87 @@ class PQueue {
  * - 전체 크루스칼 알고리즘: O(E log E + E α(V)),
  *   여기서 E는 간선의 수, V는 노드의 수.
  */
+
+/** Path Compression Union Find
+ * 1. 기존의 방식(루트노드를 찾기 위해 데이터를 선형적으로 탐색했던 시간)이 아닌 루트 노드에 대한 참조를
+ * 각 노드들에 남긴다.
+ * 2. 그룹을 합칠 때 루트 노드에 대한 정보를 찾고 루트 노드에 대한 연결만 마치면 그룹을 쉽게 통합할 수 있다
+ */
+
+class Union {
+  constructor(size = 0, sz = [], id = [], numComponents = 0) {
+    this.size = size; // 전체 노드 개수
+    this.sz = sz; // 각 트리의 크기를 저장하는 배열
+    this.id = id; // 각 노드의 부모를 저장하는 배열
+    this.numComponents = numComponents; // 연결된 컴포넌트의 개수
+  }
+
+  // 초기화 함수
+  unionFind(size) {
+    if (size <= 0) throw new Error("Size <= 0 is not allowed");
+    this.size = this.numComponents = size;
+    this.sz = Array.from({ length: size }, () => 1); // 트리 크기 초기화
+    this.id = Array.from({ length: size }, (_, i) => i); // 자기 자신을 부모로 초기화
+  }
+
+  // 루트 노드 찾기 (경로 압축 포함)
+  find(p) {
+    let root = p;
+
+    // 루트를 찾는 과정
+    while (root !== this.id[root]) {
+      root = this.id[root]; // 부모로 이동
+    }
+
+    // 경로 압축 과정
+    while (p !== root) {
+      let next = this.id[p]; // 현재 노드의 부모 저장
+      this.id[p] = root; // 현재 노드를 루트에 직접 연결
+      p = next; // 부모 노드로 이동
+    }
+
+    return root; // 최종 루트 반환
+  }
+
+  // 두 노드가 같은 컴포넌트에 속해 있는지 확인
+  connected(p, q) {
+    return this.find(p) === this.find(q);
+  }
+
+  // 특정 노드가 속한 컴포넌트의 크기를 반환
+  componentSize(p) {
+    return this.sz[this.find(p)];
+  }
+
+  // 두 노드를 병합
+  unify(p, q) {
+    let root1 = this.find(p);
+    let root2 = this.find(q);
+
+    // 이미 같은 컴포넌트면 병합하지 않음
+    if (root1 === root2) return;
+
+    // 작은 트리를 큰 트리에 병합 (Weighted Union)
+    if (this.sz[root1] < this.sz[root2]) {
+      this.sz[root2] += this.sz[root1];
+      this.id[root1] = root2; // 작은 트리를 큰 트리에 연결
+    } else {
+      this.sz[root1] += this.sz[root2];
+      this.id[root2] = root1; // 작은 트리를 큰 트리에 연결
+    }
+
+    this.numComponents--; // 컴포넌트 개수 감소
+  }
+
+  // 현재 연결된 컴포넌트의 수 반환
+  countComponents() {
+    return this.numComponents;
+  }
+}
+
+// 시간 복잡도:
+// find: O(α(n)) - 경로 압축을 통해 거의 상수 시간에 가까움
+// unify: O(α(n)) - 두 컴포넌트를 병합하는 과정
+// connected: O(α(n)) - 두 노드의 루트를 비교
+// componentSize: O(1) - 크기 배열 접근
+// countComponents: O(1) - 컴포넌트 개수 반환

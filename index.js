@@ -43,13 +43,13 @@
 function isValidBracketString(bracketString) {
   const stack = []; // 스택 초기화
   const bracketMap = {
-    ')': '(',
-    '}': '{',
-    ']': '['
+    ")": "(",
+    "}": "{",
+    "]": "[",
   };
 
   for (const bracket of bracketString) {
-    if (['(', '{', '['].includes(bracket)) {
+    if (["(", "{", "["].includes(bracket)) {
       // 여는 괄호라면 스택에 추가
       stack.push(bracket);
     } else {
@@ -152,10 +152,10 @@ stack.push(2); // 스택에 2 추가
 stack.push(5); // 스택에 5 추가
 console.log(stack.size()); // 출력: 3
 console.log(stack.peek()); // 출력: 5 (맨 위 요소)
-console.log(stack.pop());  // 출력: 5 (제거된 요소)
-console.log(stack.pop());  // 출력: 2
+console.log(stack.pop()); // 출력: 5 (제거된 요소)
+console.log(stack.pop()); // 출력: 2
 console.log(stack.isEmpty()); // 출력: false
-console.log(stack.pop());  // 출력: 4
+console.log(stack.pop()); // 출력: 4
 console.log(stack.isEmpty()); // 출력: true
 
 /**
@@ -197,7 +197,7 @@ console.log(stack.isEmpty()); // 출력: true
  * **Queue Example - BFS (Breadth-First Search)**
  * - 그래프 탐색에 큐를 사용하는 대표적인 알고리즘.
  * - 루트 노드에서 시작하여 너비를 기준으로 탐색.
- * 
+ *
  * **알고리즘 (의사 코드)**
  * Let Q be a Queue
  * While Q is not empty:
@@ -218,11 +218,11 @@ console.log(stack.isEmpty()); // 출력: true
 
 class Queue {
   constructor() {
-    this.list = []
+    this.list = [];
   }
 
   queue(firstElem) {
-    this.list.push(firstElem)
+    this.list.push(firstElem);
   }
 
   size() {
@@ -230,21 +230,21 @@ class Queue {
   }
 
   isEmpty() {
-    return this.list.length === 0
+    return this.list.length === 0;
   }
 
   peek() {
-    if (this.isEmpty()) throw new Error("Queue Empty")
+    if (this.isEmpty()) throw new Error("Queue Empty");
     return this.list[this.list.length - 1];
   }
 
   poll() {
-    if (this.isEmpty()) throw new Error("Queue Empty")
-    return this.list.shift()
+    if (this.isEmpty()) throw new Error("Queue Empty");
+    return this.list.shift();
   }
 
   offer(elem) {
-    this.list.push(elem)
+    this.list.push(elem);
   }
 
   iterator() {
@@ -254,29 +254,29 @@ class Queue {
 
 /**
  * 우선순위 큐(Priority Queues, PQs)
- * 
- * - 우선순위 큐는 **추상 자료형(ADT)**으로, 일반 큐와 유사하지만 
+ *
+ * - 우선순위 큐는 **추상 자료형(ADT)**으로, 일반 큐와 유사하지만
  *   각 요소가 **우선순위**를 가지며, 이 우선순위에 따라 요소가 제거되는 순서가 결정됩니다.
  * - 요소는 반드시 **비교 가능**해야 하며, 최소값부터 최대값(최소 PQ) 또는 최대값부터 최소값(최대 PQ) 순으로 정렬됩니다.
- * 
+ *
  * **사용 예시:**
  * - 주요 연산: `poll()` (제거), `add()` (추가), `peek()` (확인)
  * - 과정: 요소를 추가한 후, 우선순위에 따라 가장 작은 값(또는 가장 큰 값)을 제거.
  * - 내부적으로 **힙(Heap)** 자료 구조를 사용하여 우선순위 정렬 유지.
- * 
+ *
  * **힙(Heap) 개요:**
  * - 힙은 **트리 기반 자료 구조**입니다.
  * - **힙 속성(Heap Invariant)**:
  *   - 부모 노드가 자식 노드보다 항상 작거나(최소 힙) 크도록(최대 힙) 정렬.
  * - 최소 힙(Min Heap): 부모 <= 자식
  * - 최대 힙(Max Heap): 부모 >= 자식
- * 
+ *
  * **주요 사용 사례:**
  * 1. **다익스트라 최단 경로 알고리즘**: 동적으로 가장 작은 가중치를 가져옴.
  * 2. **동적 우선순위 선택**: 최선/최악의 요소를 지속적으로 선택.
  * 3. **허프만 인코딩(Huffman Encoding)**: 인코딩 트리 생성.
  * 4. **BFS 알고리즘(A* 등)**: 가장 유망한 노드를 우선적으로 선택.
- * 
+ *
  * **이진 힙을 활용한 성능:**
  * - 힙 생성: `O(n)`
  * - 가장 높은 우선순위 요소 제거(Polling): `O(log(n))`
@@ -286,10 +286,10 @@ class Queue {
  * - 해시 테이블로 제거 최적화(Advanced Removing): `O(log(n))`
  * - 단순 포함 여부 확인(Naive Contains): `O(n)`
  * - 해시 테이블로 포함 여부 확인(Contains with Hash Table): `O(1)`
- * 
+ *
  * **최소 PQ를 최대 PQ로 변환:**
-* 우선순위 큐(Priority Queue, PQ)에서의 우선순위 규칙
- * 
+ * 우선순위 큐(Priority Queue, PQ)에서의 우선순위 규칙
+ *
  * **숫자의 경우:**
  * - 우선순위 큐가 최소 PQ(min PQ)일 때:
  *   - 숫자 `x`, `y`가 주어지면, **x <= y**라면 x가 y보다 먼저 큐에서 나옵니다.
@@ -297,14 +297,14 @@ class Queue {
  * - 반대로 최대 PQ(max PQ)에서는 비교 연산을 반대로 수행합니다.
  *   - **x >= y**일 때 x가 y보다 먼저 큐에서 나옵니다.
  *   - 이를 부정하면, **x <= y**일 때 y가 x보다 먼저 큐에서 나옵니다.
- * 
+ *
  * **문자열의 경우:**
  * - 문자열의 우선순위를 정할 때는 일반적으로 **사전 순서(lexicographical order)** 또는 **역순(negative lexicographical order)**을 사용합니다.
  * - 예를 들어, 문자열 `"apple"`, `"banana"`, `"cherry"`를 lexicographical 순서로 최소 PQ에 추가하면:
  *   - 우선순위는 `"apple" -> "banana" -> "cherry"`가 됩니다.
  * - 반대로, 같은 문자열을 negative lexicographical 순서로 최소 PQ에 추가하면:
  *   - 우선순위는 `"cherry" -> "banana" -> "apple"`이 됩니다.
- * 
+ *
  * **추가 설명:**
  * - **사전 순서(lex comparator)**: 문자열을 사전적 순서에 따라 정렬.
  *   - 예: `"apple" < "banana" < "cherry"`
@@ -312,47 +312,47 @@ class Queue {
  * - **역순(nlex comparator)**: 사전 순서의 반대로 정렬.
  *   - 예: `"cherry" > "banana" > "apple"`
  *   - 결과적으로 큰 값이 먼저 나옵니다.
- * 
+ *
  * **사용 예시:**
  * - lex comparator로 문자열을 추가할 경우:
  *   - `"apple", "banana", "cherry"`를 추가 → `"apple"`이 가장 먼저 나옴.
  * - nlex comparator로 문자열을 추가할 경우:
  *   - `"apple", "banana", "cherry"`를 추가 → `"cherry"`가 가장 먼저 나옴.
- * 
-* 우선순위 큐(Priority Queue)에 효율적으로 요소 추가하기
- * 
+ *
+ * 우선순위 큐(Priority Queue)에 효율적으로 요소 추가하기
+ *
  * **우선순위 큐의 구현 방식:**
  * 우선순위 큐는 다양한 힙 구조를 사용해 구현할 수 있습니다:
  * - **이진 힙(Binary Heap)**
  * - 피보나치 힙(Fibonacci Heap)
  * - 이항 힙(Binomial Heap)
  * - 페어링 힙(Pairing Heap) 등.
- * 
+ *
  * **이진 힙(Binary Heap):**
  * - **이진 힙**은 이진 트리(Binary Tree)이며, 힙 불변 조건(Heap Invariant)을 만족합니다.
  * - **힙 불변 조건**: 부모 노드의 값이 항상 자식 노드의 값보다 작거나 같음(최소 힙) 또는 큼(최대 힙).
  * - 모든 노드는 최대 두 개의 자식을 가집니다.
- * 
+ *
  * **완전 이진 트리(Complete Binary Tree):**
  * - 트리의 모든 레벨이 마지막 레벨을 제외하고 완전히 채워져야 합니다.
  * - 마지막 레벨은 왼쪽에서 오른쪽으로 차례로 채워져야 합니다.
- * 
+ *
  * **이진 힙의 표현:**
  * - **배열**을 사용해 이진 힙을 표현합니다.
- * - 예: 
+ * - 예:
  *   - 데이터 트리: `[9, 8, 7, 6, 5, 1, 2, 2, 2, 3, 4, 0, 1, 2, 1]`
  *   - 인덱스 트리: `[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]`
- * 
+ *
  * **트리의 인덱스 관계:**
  * - 부모 노드의 인덱스를 `i`라 할 때:
  *   - 왼쪽 자식 인덱스: `2i + 1`
  *   - 오른쪽 자식 인덱스: `2i + 2`
- * 
+ *
  * **삽입(Insertion):**
  * 1. 데이터를 트리의 마지막 레벨에 추가합니다.
  * 2. **위로 거슬러 올라가며(Up-Heap)** 힙 속성을 만족하도록 부모와 교환(Swap)합니다.
  * 3. 루트 노드에 도달하거나 힙 속성이 만족되면 종료합니다.
- * 
+ *
  * **삽입 예시:**
  * 1. 초기 힙:
  *    ```
@@ -363,7 +363,7 @@ class Queue {
  *      10 12 15
  *    ```
  *    배열: `[5, 7, 8, 10, 12, 15]`
- * 
+ *
  * 2. 값 `3` 추가:
  *    - 트리의 마지막 자리에 추가:
  *    ```
@@ -374,7 +374,7 @@ class Queue {
  *      10 12 15  3
  *    ```
  *    배열: `[5, 7, 8, 10, 12, 15, 3]`
- * 
+ *
  * 3. 힙 속성 만족을 위해 부모와 교환(1차 스왑):
  *    - `3` ↔ `8` 교환:
  *    ```
@@ -385,7 +385,7 @@ class Queue {
  *      10 12 15  8
  *    ```
  *    배열: `[5, 7, 3, 10, 12, 15, 8]`
- * 
+ *
  * 4. 힙 속성 만족을 위해 부모와 교환(2차 스왑):
  *    - `3` ↔ `5` 교환:
  *    ```
@@ -396,7 +396,7 @@ class Queue {
  *      10 12 15  8
  *    ```
  *    배열: `[3, 7, 5, 10, 12, 15, 8]`
- * 
+ *
  * 5. 결과:
  *    - 힙 속성을 만족하는 최종 트리.
  *    ```
@@ -407,52 +407,52 @@ class Queue {
  *      10 12 15  8
  *    ```
  *    배열: `[3, 7, 5, 10, 12, 15, 8]`
- * 
+ *
  * Instructions:
- * 
- * Poll(): 
+ *
+ * Poll():
  * - 삭제하려는 첫 번째 요소와 트리의 마지막 요소의 위치를 교환한 뒤, 트리의 마지막 요소가 된 첫 번째 요소를 제거한다.
  * - 제거 후 힙 불변성이 깨진 상태가 되므로, 최대 힙이라면 더 큰 값, 최소 힙이라면 더 작은 값을 따라 아래로 비교하며 이동한다.
- * 
- * Remove(element): 
+ *
+ * Remove(element):
  * - 삭제할 대상을 선형 탐색으로 찾아낸 뒤, 마지막 트리 요소와 자리를 교환한 후 삭제한다.
  * - 이후, Poll()과 동일하게 트리의 조건을 맞추기 위해 비교하며 위로 올라가거나 아래로 내려간다.
- * 
+ *
  * Removing Elements From Binary Heap in O(log(n)):
  * - 제거 알고리즘의 비효율성은 요소의 위치를 확인하기 위해 선형 탐색이 필요하다는 데서 발생한다.
- * 
+ *
  * 해결 방법:
  * 1. 모든 노드를 특정 인덱스에 매핑하여, 제거할 노드의 인덱스를 빠르게 찾는다.
  * 2. 힙에 중복된 값이 있을 경우, 하나의 값을 여러 위치에 매핑할 수 있다.
  * 3. 각 값에 대한 인덱스 집합 또는 트리 집합을 유지하여 효율적인 삭제를 수행한다.
- * 
+ *
  * Example:
  * Node Value    Position Value
  * 2             0, 2, 6
  * 7             1, 4
  * 11            3
- * 
+ *
  * - 버블 업(Bubble Up) 및 버블 다운(Bubble Down) 작업 중, 각 값의 인덱스를 매핑하여 저장한다.
  * - 특정 값을 교환할 수 있는 동일한 레벨의 노드와 자리를 바꾼 뒤 제거한다.
- * 
- * Question: 
+ *
+ * Question:
  * - 중복된 노드를 제거하려고 할 때, 어느 노드를 제거해야 할까? 제거할 노드를 선택하는 것이 중요한가?
- * 
- * Answer: 
+ *
+ * Answer:
  * - 힙의 조건만 만족한다면 어느 노드를 제거하든 상관없다.
- * 
+ *
  * Instructions:
- * insert(3): 
+ * insert(3):
  * - 트리의 바닥 레벨에 새로운 노드를 추가한다.
  * - 값과 인덱스를 매핑 테이블에 추가한다.
  * - 힙 불변성을 확인하고, 필요 시 버블 업(Bubble Up) 또는 버블 다운(Bubble Down) 작업을 수행한다.
- * 
- * remove(2): 
+ *
+ * remove(2):
  * - 값이 2인 노드 중 아무 노드나 제거한다. 예를 들어, 상위 노드를 제거한다고 가정하면,
  *   마지막 노드와 교환한 후 인덱스도 변경한다.
  * - 이후, 버블 업 또는 버블 다운을 수행하여 힙 조건을 만족시킨다.
- * 
- * poll(): 
+ *
+ * poll():
  * - Remove와 동일한 과정을 따른다.
  */
 
@@ -466,7 +466,10 @@ class PQueue {
 
   // 두 인덱스의 요소를 교환하는 메서드
   swap(index1, index2) {
-    [this.heap[index1], this.heap[index2]] = [this.heap[index2], this.heap[index1]];
+    [this.heap[index1], this.heap[index2]] = [
+      this.heap[index2],
+      this.heap[index1],
+    ];
 
     // 인덱스 매핑을 업데이트
     this.nodeToIndexMap.set(this.heap[index1], index1);
@@ -587,7 +590,7 @@ class PQueue {
  * 주요 연산:
  *   - **Find**: 특정 요소가 속한 집합을 확인합니다. 이를 통해 두 요소가 같은 집합에 속해 있는지 확인할 수 있습니다.
  *   - **Union**: 두 집합을 하나로 병합합니다.
- * 
+ *
  * 유니온 파인드가 사용되는 경우:
  * 1. **크루스칼 최소 신장 트리 알고리즘 (Kruskal's MST)**:
  *    - 크루스칼 알고리즘에서 사이클을 감지하고 컴포넌트를 병합할 때 사용됩니다.
@@ -599,7 +602,7 @@ class PQueue {
  *    - 고급 알고리즘에서 트리를 사전 처리할 때 사용됩니다.
  * 5. **이미지 처리**:
  *    - 바이너리 이미지에서 연결된 구성 요소를 식별합니다.
- * 
+ *
  * 시간 복잡도:
  * - **구성**: O(n) (요소 수 `n`에 비례)
  * - **Union**: O(α(n)) (여기서 α(n)은 아커만 함수의 역함수로, 매우 느리게 증가합니다)
@@ -611,7 +614,7 @@ class PQueue {
 
 /** Kruskal's Algorithm (크루스칼 알고리즘)
  * 그래프 G = (V, E)의 최소 신장 트리(MST)를 찾는 알고리즘.
- * 
+ *
  * 단계:
  * 1. 모든 간선을 가중치 기준 오름차순으로 정렬.
  * 2. 정렬된 간선을 하나씩 처리:
@@ -756,3 +759,152 @@ class Union {
 // connected: O(α(n)) - 두 노드의 루트를 비교
 // componentSize: O(1) - 크기 배열 접근
 // countComponents: O(1) - 컴포넌트 개수 반환
+
+/**
+ * 이진 탐색 트리 (Binary Search Tree, BST)
+ * - BST는 이진 트리의 일종으로, 모든 노드가 다음의 조건을 만족합니다:
+ *   - 왼쪽 서브트리에 있는 값들은 노드의 값보다 작습니다.
+ *   - 오른쪽 서브트리에 있는 값들은 노드의 값보다 큽니다.
+ *
+ * 주요 용어:
+ * 1. 루트 노드:
+ *    - 트리의 최상단에 있는 노드로, 부모 노드가 없습니다.
+ * 2. 부모와 자식:
+ *    - 부모 노드는 자식 노드를 가리키며, 자식은 최대 두 개입니다 (왼쪽과 오른쪽).
+ * 3. 리프 노드:
+ *    - 자식이 없는 노드입니다.
+ * 4. 서브트리:
+ *    - 특정 노드를 루트로 하는 트리 구조입니다.
+ *
+ * BST의 사용 사례:
+ * 1. 데이터 저장 및 탐색:
+ *    - 지도(Map)와 집합(Set) 자료형 구현.
+ *    - AVL 트리, Red-Black 트리 등 균형 트리 구현.
+ * 2. 응용:
+ *    - 구문 트리(Syntax Tree) - 표현식 파싱.
+ *    - 이진 힙(Binary Heap) - 우선순위 큐.
+ *    - Treap(랜덤화된 이진 탐색 트리).
+ *
+ * 시간 복잡도 (n: 노드 개수)
+ * - 평균 성능:
+ *   삽입: O(log(n))
+ *   삭제: O(log(n))
+ *   탐색: O(log(n))
+ * - 최악 성능 (트리가 한쪽으로 치우친 경우):
+ *   삽입: O(n)
+ *   삭제: O(n)
+ *   탐색: O(n)
+ *
+ * BST를 사용하는 이유:
+ * 1. 동적으로 정렬된 데이터를 효율적으로 관리.
+ * 2. 균형 트리(AVL, Red-Black)를 사용하면 최악의 경우를 방지 가능.
+ */
+
+/**
+ * 이진 탐색 트리에 원소를 추가하는 방법:
+ * - BST의 원소는 서로 비교 가능해야 합니다. 이를 통해 트리 내에서 정렬할 수 있습니다.
+ * - 원소를 삽입할 때는 현재 노드의 값과 비교하여 다음을 결정합니다:
+ *   1. 삽입하려는 값이 현재 노드의 값보다 작으면 왼쪽 서브트리로 이동. (< 경우)
+ *   2. 삽입하려는 값이 현재 노드의 값보다 크면 오른쪽 서브트리로 이동. (> 경우)
+ *   3. 동일한 값(=)을 발견한 경우:
+ *      - 중복값을 허용할지 여부에 따라 처리 방식 결정.
+ *   4. 빈 노드(null)를 발견하면 새 노드를 생성하여 삽입.
+ *
+ * **예제**:
+ * - insert(3): [3]
+ * - insert(20): [3, 20]
+ * - insert(5): [3, 5, 20]
+ * - insert(15): [3, 5, 15, 20]
+ * - insert(25): [3, 5, 15, 20, 25]
+ * - insert(4): [3, 4, 5, 15, 20, 25]
+ * - insert(40): [3, 4, 5, 15, 20, 25, 40]
+ * - insert(2): [2, 3, 4, 5, 15, 20, 25, 40]
+ *
+ * **시간 복잡도**:
+ * - 평균: O(log(n))
+ * - 최악: O(n) (트리가 한쪽으로 치우친 경우)
+ *
+ * **최악의 경우 예제**:
+ * - insert(1)
+ * - insert(2)
+ * - insert(3)
+ * - insert(4)
+ * - insert(5)
+ * - insert(6)
+ * - 결과 트리: [1, 2, 3, 4, 5, 6]
+ *   - 트리가 한쪽으로 치우쳐 있어 선형 구조를 가집니다.
+ *   - 이러한 상황을 방지하기 위해 AVL 트리, Red-Black 트리와 같은 균형 트리를 사용합니다.
+ */
+
+/** Removing elements from a BST
+ * 1. 삭제할 원소 찾기 (Find Phase)
+ * - BST에서 삭제할 값을 찾기 위해 탐색을 수행.
+ * - 탐색 조건:
+ *   1) null 노드: 값이 트리에 존재하지 않음.
+ *   2) 값 발견: 현재 노드 값과 삭제하려는 값이 동일함.
+ *   3) 값이 작음: 삭제하려는 값이 현재 노드보다 작으면 왼쪽 서브트리로 이동.
+ *   4) 값이 큼: 삭제하려는 값이 현재 노드보다 크면 오른쪽 서브트리로 이동.
+ *
+ * 2. 삭제 단계 (Remove Phase)
+ * - 삭제하려는 노드 상태에 따라 처리:
+ *   1) 리프 노드 (Leaf Node):
+ *      - 자식이 없는 노드는 단순히 삭제.
+ *   2) 한 자식만 있는 노드:
+ *      - 삭제하려는 노드의 자식을 부모 노드와 연결하여 대체.
+ *   3) 두 자식을 가진 노드:
+ *      - 중위 후속자(in-order successor) 또는 중위 선행자(in-order predecessor)를 찾아 값을 대체.
+ *      - 중위 후속자는 오른쪽 서브트리에서 가장 작은 값.
+ *      - 중위 선행자는 왼쪽 서브트리에서 가장 큰 값.
+ *
+ * 3. 왜 오른쪽에서는 가장 작은 값, 왼쪽에서는 가장 큰 값을 선택하나?
+ * - BST 불변 조건: "왼쪽 서브트리의 모든 값 <= 현재 노드 < 오른쪽 서브트리의 모든 값".
+ * - 중위 후속자(오른쪽에서 가장 작은 값):
+ *   1) 오른쪽 서브트리에서 가장 작은 값은 삭제할 노드보다 크면서 가장 가까운 값.
+ *   2) BST 불변 조건을 유지하면서 값 대체 가능.
+ * - 중위 선행자(왼쪽에서 가장 큰 값):
+ *   1) 왼쪽 서브트리에서 가장 큰 값은 삭제할 노드보다 작으면서 가장 가까운 값.
+ *   2) BST 불변 조건을 유지하면서 값 대체 가능.
+ *
+ * 4. 시간 복잡도
+ * - 탐색 및 삭제:
+ *   - 평균: O(log(n)) (균형 트리일 경우)
+ *   - 최악: O(n) (트리가 한쪽으로 치우쳐 있는 경우)
+ *
+ * 5. 예제 코드
+ */
+
+function removeNode(root, value) {
+  if (!root) return null; // 값이 존재하지 않음
+
+  if (value < root.value) {
+    root.left = removeNode(root.left, value); // 왼쪽 서브트리 탐색
+  } else if (value > root.value) {
+    root.right = removeNode(root.right, value); // 오른쪽 서브트리 탐색
+  } else {
+    // 삭제할 노드 발견
+    if (!root.left && !root.right) {
+      // 리프 노드
+      return null;
+    } else if (!root.left) {
+      // 오른쪽 자식만 있음
+      return root.right;
+    } else if (!root.right) {
+      // 왼쪽 자식만 있음
+      return root.left;
+    } else {
+      // 두 자식을 가진 경우
+      let successor = findMin(root.right); // 중위 후속자 찾기
+      root.value = successor.value; // 중위 후속자의 값으로 대체
+      root.right = removeNode(root.right, successor.value); // 후속자 삭제
+    }
+  }
+  return root;
+}
+
+/** 중위 후속자 찾기 */
+function findMin(node) {
+  while (node.left) {
+    node = node.left; // 가장 작은 값 찾기
+  }
+  return node;
+}
